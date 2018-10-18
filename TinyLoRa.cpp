@@ -344,8 +344,10 @@ void TinyLoRa::sendData(unsigned char *Data, unsigned char Data_Length, unsigned
 
   //Add data Lenth to package length
   RFM_Package_Length = RFM_Package_Length + Data_Length;
-  Serial.print("Package length: ");
-  Serial.println(RFM_Package_Length);
+  #ifdef DEBUG
+    Serial.print("Package length: ");
+    Serial.println(RFM_Package_Length);
+  #endif
   
   //Calculate MIC
   Calculate_MIC(RFM_Data, MIC, RFM_Package_Length, Frame_Counter_Tx, Direction);
@@ -361,7 +363,9 @@ void TinyLoRa::sendData(unsigned char *Data, unsigned char Data_Length, unsigned
  
   //Send Package
   RFM_Send_Package(RFM_Data, RFM_Package_Length);
-  Serial.println("sent package!");
+  #ifdef DEBUG
+    Serial.println("sent package!");
+  #endif
 }
 /*
 *****************************************************************************************

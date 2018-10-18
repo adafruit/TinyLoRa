@@ -6,7 +6,7 @@
 #include <avr/pgmspace.h>
 
 // Enable library debugging
-#define DEBUG
+//#define DEBUG
 
 // pin configuration (defaults to feather 32u4 pinmap)
 #define DIO0 7
