@@ -7,13 +7,9 @@
 // debugging, unset if you don't need this.
 #define DEBUG
 
-// Multi-Channel Package Sending (default)
-//#define MULTICH
-#define SGLCH
-
 /**************************************************************************/
 /*! 
-    @brief  RFM Channel List
+    @brief RFM Channel List
 */
 /**************************************************************************/
 typedef enum rfm_channels
@@ -47,12 +43,15 @@ typedef enum rfm_channels
 #define MODE_TX     0x83
 
 /* RFM Registers */
-#define REG_PA_CONFIG            0x09
-#define REG_PREAMBLE_MSB         0x20
-#define REG_PREAMBLE_LSB         0x21
-#define RegFrfMsb                0x06
-#define RegFrfMid                0x07
-#define RegFrfLsb                0x08
+#define REG_PA_CONFIG              0x09
+#define REG_PREAMBLE_MSB           0x20
+#define REG_PREAMBLE_LSB           0x21
+#define REG_FRF_MSB                0x06
+#define REG_FRF_MID                0x07
+#define REG_FRF_LSB                0x08
+#define REG_FEI_LSB                0x1E
+#define REG_FEI_MSB                0x1D
+#define REG_MODEM_CONFIG           0x26
 
 /* TinyLoRa Class */
 class TinyLoRa
