@@ -1,4 +1,4 @@
-// Hello LoRa - ABP TTN Packet Sender
+// Hello LoRa - ABP TTN Packet Sender (Multi-Channel)
 // Tutorial Link: https://learn.adafruit.com/the-things-network-for-feather/using-a-feather-32u4
 //
 // Adafruit invests time and resources providing this open source code.
@@ -42,6 +42,10 @@ void setup()
   
   // Initialize LoRa
   Serial.println("Starting LoRa...");
+  // define multi-channel sending
+  lora.setChannel(MULTI);
+  // set datarate
+  lora.setDatarate(SF7BW125);
   lora.begin();
 }
 

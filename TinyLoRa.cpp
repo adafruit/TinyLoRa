@@ -153,6 +153,9 @@ void TinyLoRa::setDatarate(rfm_datarates_t datarate) {
       _modemcfg = 0x0C;
       break;
     default:
+      _sf = 0x74;
+      _bw = 0x72;
+      _modemcfg = 0x04;
       break;
   }
 }
@@ -218,6 +221,7 @@ void TinyLoRa::setChannel(rfm_channels_t channel) {
       _isMultiChan = 1;
       break;
     default:
+      _isMultiChan = 1;
       break;
   }
 }
