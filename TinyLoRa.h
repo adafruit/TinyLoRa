@@ -26,7 +26,7 @@ typedef enum rfm_channels
   CH5,
   CH6,
   CH7,
-  MUTLI,
+  MULTI,
 } rfm_channels_t;
 
 /* TTN Configuration */
@@ -72,6 +72,7 @@ class TinyLoRa
 	private:
 		uint8_t randomNum;
 		int8_t _cs, _irq;
+    bool _isMultiChan;
     unsigned char _rfmMSB, _rfmMID, _rfmLSB;
     static const unsigned char LoRa_Frequency[8][3];
 		static const unsigned char S_Table[16][16];

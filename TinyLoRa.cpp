@@ -116,8 +116,8 @@ static const unsigned char PROGMEM TinyLoRa::S_Table[16][16] = {
 
 /**************************************************************************/
 /*! 
-    @brief Set the single-channel to send
-    @param channel Which channel to send data on
+    @brief Set the RFM channel.
+    @param channel Which channel to send data
 */
 /**************************************************************************/
 void TinyLoRa::setChannel(rfm_channels_t channel)
@@ -129,35 +129,55 @@ void TinyLoRa::setChannel(rfm_channels_t channel)
       _rfmLSB = 0xE1;
       _rfmMID = 0xF9;
       _rfmMSB = 0xC0;
+      _isMultiChan = 0;
       break;
     case CH1:
       _rfmLSB = 0xE2;
       _rfmMID = 0x06;
       _rfmMSB = 0x8C;
+      _isMultiChan = 0;
       break;
     case CH2:
       _rfmLSB = 0xE2;
       _rfmMID = 0x13;
       _rfmMSB = 0x59;
+      _isMultiChan = 0;
       break;
     case CH3:
       _rfmLSB = 0xE2;
       _rfmMID = 0x20;
       _rfmMSB = 0x26;
+      _isMultiChan = 0;
       break;
     case CH4:
       _rfmLSB = 0xE2;
       _rfmMID = 0x2C;
       _rfmMSB = 0xF3;
+      _isMultiChan = 0;
       break;
     case CH5:
       _rfmLSB = 0xE2;
       _rfmMID = 0x39;
       _rfmMSB = 0xC0;
+      _isMultiChan = 0;
+      break;
     case CH6:
       _rfmLSB = 0xE2;
       _rfmMID = 0x46;
       _rfmMSB = 0x8C;
+      _isMultiChan = 0;
+      break;
+    case CH7:
+      _rfmLSB = 0xE2;
+      _rfmMID = 0x53;
+      _rfmMSB = 0x59;
+      _isMultiChan = 0;
+      break;
+    case MULTI:
+      _isMultiChan = 1;
+      break;
+    default:
+      break;
   }
 }
 
@@ -250,19 +270,29 @@ void TinyLoRa::RFM_Send_Package(unsigned char *RFM_Tx_Package, unsigned char Pac
   //Switch _irq to TxDone
   RFM_Write(0x40,0x40);
 
-// Single Channel Send on CH6, 903.9MHz
-// 0xE1, 0xF9, 0xC0
-#ifdef SGLCH
-  RFM_Write(RegFrfMsb, _rfmMSB);
-  RFM_Write(RegFrfMid, _rfmMID);
-  RFM_Write(RegFrfLsb, _rfmLSB);
-#endif
+  if (_isMultiChan == 1) {
+    Serial.println("Multi Channel enabled");
+    RFM_Write(RegFrfMsb, pgm_read_byte(&(LoRa_Frequency[randomNum][0])));
+    RFM_Write(RegFrfMid, pgm_read_byte(&(LoRa_Frequency[randomNum][1])));
+    RFM_Write(RegFrfLsb, pgm_read_byte(&(LoRa_Frequency[randomNum][2])));
+  } else {
+    Serial.println("Single Channel enabled");
+    RFM_Write(RegFrfMsb, _rfmMSB);
+    RFM_Write(RegFrfMid, _rfmMID);
+    RFM_Write(RegFrfLsb, _rfmLSB);
+  }
 
-#ifdef MULTICH
-  RFM_Write(RegFrfMsb, pgm_read_byte(&(LoRa_Frequency[randomNum][0])));
-  RFM_Write(RegFrfMid, pgm_read_byte(&(LoRa_Frequency[randomNum][1])));
-  RFM_Write(RegFrfLsb, pgm_read_byte(&(LoRa_Frequency[randomNum][2])));
-#endif
+// #ifdef SGLCH
+//   RFM_Write(RegFrfMsb, _rfmMSB);
+//   RFM_Write(RegFrfMid, _rfmMID);
+//   RFM_Write(RegFrfLsb, _rfmLSB);
+// #endif
+
+// #ifdef MULTICH
+//   RFM_Write(RegFrfMsb, pgm_read_byte(&(LoRa_Frequency[randomNum][0])));
+//   RFM_Write(RegFrfMid, pgm_read_byte(&(LoRa_Frequency[randomNum][1])));
+//   RFM_Write(RegFrfLsb, pgm_read_byte(&(LoRa_Frequency[randomNum][2])));
+// #endif
 
 #ifdef SF12BW125         //SF12 BW 125 kHz
   RFM_Write(0x1E, 0xC4); //SF12 CRC On
