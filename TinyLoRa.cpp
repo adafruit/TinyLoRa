@@ -110,17 +110,63 @@ static const unsigned char PROGMEM TinyLoRa::S_Table[16][16] = {
 
 /**************************************************************************/
 /*! 
+    @brief Set the RFM datarate
+    @param channel Which channel to send data
+*/
+/**************************************************************************/
+void TinyLoRa::setDatarate(rfm_datarates_t datarate) {
+  _sf, _bw, _modemcfg = 0;
+  switch(datarate) {
+    case SF7BW125:
+      _sf = 0x74;
+      _bw = 0x72;
+      _modemcfg = 0x04;
+      break;
+    case SF7BW250:
+      _sf = 0x74;
+      _bw = 0x82;
+      _modemcfg = 0x04;
+      break;
+    case SF8BW125:
+      _sf = 0x84;
+      _bw = 0x72;
+      _modemcfg = 0x04;
+      break;
+    case SF9BW125:
+      _sf = 0x94;
+      _bw = 0x72;
+      _modemcfg = 0x04;
+      break;
+    case SF10BW125:
+      _sf = 0xA4;
+      _bw = 0x72;
+      _modemcfg = 0x04;
+      break;
+    case SF11BW125:
+      _sf = 0xB4;
+      _bw = 0x72;
+      _modemcfg = 0x0C;
+      break;
+    case SF12BW125:
+      _sf = 0xC4;
+      _bw = 0x72;
+      _modemcfg = 0x0C;
+      break;
+    default:
+      break;
+  }
+}
+/**************************************************************************/
+/*! 
     @brief Set the RFM channel.
     @param channel Which channel to send data
 */
 /**************************************************************************/
-void TinyLoRa::setChannel(rfm_channels_t channel)
-{
+void TinyLoRa::setChannel(rfm_channels_t channel) {
   _rfmMSB, _rfmLSB, _rfmMID = 0;
   switch (channel)
   {
     case CH0:
-      Serial.println("Freq Test: ");
       _rfmLSB = pgm_read_byte(&(LoRa_Frequency[0][0]));
       _rfmMID = pgm_read_byte(&(LoRa_Frequency[0][1]));
       _rfmMSB = pgm_read_byte(&(LoRa_Frequency[0][2]));
@@ -270,7 +316,7 @@ void TinyLoRa::RFM_Send_Package(unsigned char *RFM_Tx_Package, unsigned char Pac
   //Switch _irq to TxDone
   RFM_Write(0x40,0x40);
 
-  // Select which channel to send data on 
+  // select rfm channel
   if (_isMultiChan == 1) {
     RFM_Write(REG_FRF_MSB, pgm_read_byte(&(LoRa_Frequency[randomNum][0])));
     RFM_Write(REG_FRF_MID, pgm_read_byte(&(LoRa_Frequency[randomNum][1])));
@@ -281,47 +327,10 @@ void TinyLoRa::RFM_Send_Package(unsigned char *RFM_Tx_Package, unsigned char Pac
     RFM_Write(REG_FRF_LSB, _rfmLSB);
   }
 
-#ifdef SF12BW125         //SF12 BW 125 kHz
-  RFM_Write(REG_FEI_LSB, 0xC4); //SF12 CRC On
-  RFM_Write(REG_FEI_MSB, 0x72); //125 kHz 4/5 coding rate explicit header mode
-  RFM_Write(REG_MODEM_CONFIG, 0x0C); //Low datarate optimization on AGC auto on
-#endif
-
-#ifdef SF11BW125         //SF11 BW 125 kHz
-  RFM_Write(REG_FEI_LSB, 0xB4); //SF11 CRC On
-  RFM_Write(REG_FEI_MSB, 0x72); //125 kHz 4/5 coding rate explicit header mode
-  RFM_Write(REG_MODEM_CONFIG, 0x0C); //Low datarate optimization on AGC auto on
-#endif
-
-#ifdef SF10BW125         //SF10 BW 125 kHz
-  RFM_Write(REG_FEI_LSB, 0xA4); //SF10 CRC On
-  RFM_Write(REG_FEI_MSB, 0x72); //125 kHz 4/5 coding rate explicit header mode
-  RFM_Write(REG_MODEM_CONFIG, 0x04); //Low datarate optimization off AGC auto on
-#endif
-
-#ifdef SF9BW125          //SF9 BW 125 kHz
-  RFM_Write(REG_FEI_LSB, 0x94); //SF9 CRC On
-  RFM_Write(REG_FEI_MSB, 0x72); //125 kHz 4/5 coding rate explicit header mode
-  RFM_Write(REG_MODEM_CONFIG, 0x04); //Low datarate optimization off AGC auto on
-#endif
-
-#ifdef SF8BW125          //SF8 BW 125 kHz
-  RFM_Write(REG_FEI_LSB, 0x84); //SF8 CRC On
-  RFM_Write(REG_FEI_MSB, 0x72); //125 kHz 4/5 coding rate explicit header mode
-  RFM_Write(REG_MODEM_CONFIG, 0x04); //Low datarate optimization off AGC auto on
-#endif
-
-#ifdef SF7BW125          //SF7 BW 125 kHz
-  RFM_Write(REG_FEI_LSB, 0x74); //SF7 CRC On
-  RFM_Write(REG_FEI_MSB, 0x72); //125 kHz 4/5 coding rate explicit header mode
-  RFM_Write(REG_MODEM_CONFIG, 0x04); //Low datarate optimization off AGC auto on
-#endif
-
-#ifdef SF7BW250          //SF7 BW 250kHz
-  RFM_Write(REG_FEI_LSB, 0x74); //SF7 CRC On
-  RFM_Write(REG_FEI_MSB, 0x82); //250 kHz 4/5 coding rate explicit header mode
-  RFM_Write(REG_MODEM_CONFIG, 0x04); //Low datarate optimization off AGC auto on
-#endif 
+  /* Set RFM Datarate */
+  RFM_Write(REG_FEI_LSB, _sf);
+  RFM_Write(REG_FEI_MSB, _bw);
+  RFM_Write(REG_MODEM_CONFIG, _modemcfg);
 
   //Set payload length to the right length
   RFM_Write(0x22,Package_Length);

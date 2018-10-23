@@ -25,16 +25,24 @@ typedef enum rfm_channels
   MULTI,
 } rfm_channels_t;
 
-/* TTN Configuration */
+/**************************************************************************/
+/*! 
+    @brief RFM Datarate List
+*/
+/**************************************************************************/
+typedef enum rfm_datarates
+{
+  SF7BW125,
+  SF7BW250,
+  SF8BW125,
+  SF9BW125,
+  SF10BW125,
+  SF11BW125,
+  SF12BW125,
+} rfm_datarates_t;
+
+// TTN region configuration
 #define US902
-// Define fixed datarate
-#define SF7BW125
-//#define SF12BW125
-//#define SF11BW125
-//#define SF10BW125
-//#define SF9BW125
-//#define SF8BW125
-//#define SF7BW250
 
 /* RFM Modes */
 #define MODE_SLEEP  0x00
@@ -60,6 +68,7 @@ class TinyLoRa
 		uint8_t txrandomNum;
 		uint16_t frameCounter;
     void setChannel(rfm_channels_t channel);
+    void setDatarate(rfm_datarates_t datarate);
     TinyLoRa(int8_t rfm_dio0, int8_t rfm_nss);
 		void begin(void);
 		void sendData(unsigned char *Data, unsigned char Data_Length, unsigned int Frame_Counter_Tx);
@@ -68,7 +77,7 @@ class TinyLoRa
 		uint8_t randomNum;
 		int8_t _cs, _irq;
     bool _isMultiChan;
-    unsigned char _rfmMSB, _rfmMID, _rfmLSB;
+    unsigned char _rfmMSB, _rfmMID, _rfmLSB, _sf, _bw, _modemcfg;
     static const unsigned char LoRa_Frequency[8][3];
 		static const unsigned char S_Table[16][16];
 		void RFM_Send_Package(unsigned char *RFM_Tx_Package, unsigned char Package_Length);
