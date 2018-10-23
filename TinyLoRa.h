@@ -30,11 +30,7 @@ typedef enum rfm_channels
 } rfm_channels_t;
 
 /* TTN Configuration */
-// Set TTN frequecy plan EU863, AU915, AS920, US902
 #define US902
-//#define EU863
-//#define AU915
-//#define AS920
 // Define fixed datarate
 #define SF7BW125
 //#define SF12BW125

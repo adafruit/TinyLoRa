@@ -108,12 +108,6 @@ static const unsigned char PROGMEM TinyLoRa::S_Table[16][16] = {
 	  {0x8C,0xA1,0x89,0x0D,0xBF,0xE6,0x42,0x68,0x41,0x99,0x2D,0x0F,0xB0,0x54,0xBB,0x16}
 	};
 
-/*
-*****************************************************************************************
-* Description: Function used to initialize the RFM module on startup
-*****************************************************************************************
-*/
-
 /**************************************************************************/
 /*! 
     @brief Set the RFM channel.
@@ -126,51 +120,52 @@ void TinyLoRa::setChannel(rfm_channels_t channel)
   switch (channel)
   {
     case CH0:
-      _rfmLSB = 0xE1;
-      _rfmMID = 0xF9;
-      _rfmMSB = 0xC0;
+      Serial.println("Freq Test: ");
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[0][0]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[0][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[0][2]));
       _isMultiChan = 0;
       break;
     case CH1:
-      _rfmLSB = 0xE2;
-      _rfmMID = 0x06;
-      _rfmMSB = 0x8C;
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[1][0]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[1][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[1][2]));
       _isMultiChan = 0;
       break;
     case CH2:
-      _rfmLSB = 0xE2;
-      _rfmMID = 0x13;
-      _rfmMSB = 0x59;
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[2][0]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[2][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[2][2]));
       _isMultiChan = 0;
       break;
     case CH3:
-      _rfmLSB = 0xE2;
-      _rfmMID = 0x20;
-      _rfmMSB = 0x26;
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[3][0]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[3][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[3][2]));
       _isMultiChan = 0;
       break;
     case CH4:
-      _rfmLSB = 0xE2;
-      _rfmMID = 0x2C;
-      _rfmMSB = 0xF3;
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[4][0]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[4][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[4][2]));
       _isMultiChan = 0;
       break;
     case CH5:
-      _rfmLSB = 0xE2;
-      _rfmMID = 0x39;
-      _rfmMSB = 0xC0;
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[5][0]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[5][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[5][2]));
       _isMultiChan = 0;
       break;
     case CH6:
-      _rfmLSB = 0xE2;
-      _rfmMID = 0x46;
-      _rfmMSB = 0x8C;
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[6][0]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[6][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[6][2]));
       _isMultiChan = 0;
       break;
     case CH7:
-      _rfmLSB = 0xE2;
-      _rfmMID = 0x53;
-      _rfmMSB = 0x59;
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[7][0]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[7][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[7][2]));
       _isMultiChan = 0;
       break;
     case MULTI:
@@ -193,6 +188,11 @@ TinyLoRa::TinyLoRa(int8_t rfm__irq, int8_t rfm_nss) {
   _cs = rfm_nss;
 }
 
+/*
+*****************************************************************************************
+* Description: Function used to initialize the RFM module on startup
+*****************************************************************************************
+*/
 void TinyLoRa::begin() 
 {
 
@@ -270,29 +270,16 @@ void TinyLoRa::RFM_Send_Package(unsigned char *RFM_Tx_Package, unsigned char Pac
   //Switch _irq to TxDone
   RFM_Write(0x40,0x40);
 
+  // Select which channel to send data on 
   if (_isMultiChan == 1) {
-    Serial.println("Multi Channel enabled");
     RFM_Write(RegFrfMsb, pgm_read_byte(&(LoRa_Frequency[randomNum][0])));
     RFM_Write(RegFrfMid, pgm_read_byte(&(LoRa_Frequency[randomNum][1])));
     RFM_Write(RegFrfLsb, pgm_read_byte(&(LoRa_Frequency[randomNum][2])));
   } else {
-    Serial.println("Single Channel enabled");
     RFM_Write(RegFrfMsb, _rfmMSB);
     RFM_Write(RegFrfMid, _rfmMID);
     RFM_Write(RegFrfLsb, _rfmLSB);
   }
-
-// #ifdef SGLCH
-//   RFM_Write(RegFrfMsb, _rfmMSB);
-//   RFM_Write(RegFrfMid, _rfmMID);
-//   RFM_Write(RegFrfLsb, _rfmLSB);
-// #endif
-
-// #ifdef MULTICH
-//   RFM_Write(RegFrfMsb, pgm_read_byte(&(LoRa_Frequency[randomNum][0])));
-//   RFM_Write(RegFrfMid, pgm_read_byte(&(LoRa_Frequency[randomNum][1])));
-//   RFM_Write(RegFrfLsb, pgm_read_byte(&(LoRa_Frequency[randomNum][2])));
-// #endif
 
 #ifdef SF12BW125         //SF12 BW 125 kHz
   RFM_Write(0x1E, 0xC4); //SF12 CRC On
