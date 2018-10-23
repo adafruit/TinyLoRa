@@ -114,6 +114,60 @@ static const unsigned char PROGMEM TinyLoRa::S_Table[16][16] = {
 *****************************************************************************************
 */
 
+/**************************************************************************/
+/*! 
+    @brief Set the single-channel to send
+    @param channel Which channel to send data on
+*/
+/**************************************************************************/
+void TinyLoRa::setChannel(rfm_channels_t channel)
+{
+  _rfmMSB, _rfmLSB, _rfmMID = 0;
+  switch (channel)
+  {
+    case CH0:
+      _rfmLSB = 0xE1;
+      _rfmMID = 0xF9;
+      _rfmMSB = 0xC0;
+      break;
+    case CH1:
+      _rfmLSB = 0xE2;
+      _rfmMID = 0x06;
+      _rfmMSB = 0x8C;
+      break;
+    case CH2:
+      _rfmLSB = 0xE2;
+      _rfmMID = 0x13;
+      _rfmMSB = 0x59;
+      break;
+    case CH3:
+      _rfmLSB = 0xE2;
+      _rfmMID = 0x20;
+      _rfmMSB = 0x26;
+      break;
+    case CH4:
+      _rfmLSB = 0xE2;
+      _rfmMID = 0x2C;
+      _rfmMSB = 0xF3;
+      break;
+    case CH5:
+      _rfmLSB = 0xE2;
+      _rfmMID = 0x39;
+      _rfmMSB = 0xC0;
+    case CH6:
+      _rfmLSB = 0xE2;
+      _rfmMID = 0x46;
+      _rfmMSB = 0x8C;
+  }
+}
+
+/**************************************************************************/
+/*! 
+    @brief constructor initializes provided pin values
+    @param rfm_irq interrupt pin (rfm_nss)
+    @parm rfm_nss ss pin (rfm_nss)
+*/
+/**************************************************************************/
 TinyLoRa::TinyLoRa(int8_t rfm__irq, int8_t rfm_nss) {
   _irq = rfm__irq;
   _cs = rfm_nss;
@@ -199,14 +253,12 @@ void TinyLoRa::RFM_Send_Package(unsigned char *RFM_Tx_Package, unsigned char Pac
 // Single Channel Send on CH6, 903.9MHz
 // 0xE1, 0xF9, 0xC0
 #ifdef SGLCH
-  RFM_Write(RegFrfMsb, 0xE1);
-  RFM_Write(RegFrfMid, 0xF9);
-  RFM_Write(RegFrfLsb, 0xC0);
+  RFM_Write(RegFrfMsb, _rfmMSB);
+  RFM_Write(RegFrfMid, _rfmMID);
+  RFM_Write(RegFrfLsb, _rfmLSB);
 #endif
 
 #ifdef MULTICH
-  // change the channel of the RFM module
-  // br: carrier freq split between 0x06, 0x07, 0x08
   RFM_Write(RegFrfMsb, pgm_read_byte(&(LoRa_Frequency[randomNum][0])));
   RFM_Write(RegFrfMid, pgm_read_byte(&(LoRa_Frequency[randomNum][1])));
   RFM_Write(RegFrfLsb, pgm_read_byte(&(LoRa_Frequency[randomNum][2])));

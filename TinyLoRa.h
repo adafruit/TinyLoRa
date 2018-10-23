@@ -5,10 +5,29 @@
 #include <avr/pgmspace.h>
 
 // debugging, unset if you don't need this.
-//#define DEBUG
+#define DEBUG
 
 // Multi-Channel Package Sending (default)
-#define MULTICH
+//#define MULTICH
+#define SGLCH
+
+/**************************************************************************/
+/*! 
+    @brief  RFM Channel List
+*/
+/**************************************************************************/
+typedef enum rfm_channels
+{
+  CH0,
+  CH1,
+  CH2,
+  CH3,
+  CH4,
+  CH5,
+  CH6,
+  CH7,
+  MUTLI,
+} rfm_channels_t;
 
 /* TTN Configuration */
 // Set TTN frequecy plan EU863, AU915, AS920, US902
@@ -45,14 +64,16 @@ class TinyLoRa
 	public:
 		uint8_t txrandomNum;
 		uint16_t frameCounter;
-		TinyLoRa(int8_t rfm_dio0, int8_t rfm_nss);
+    void setChannel(rfm_channels_t channel);
+    TinyLoRa(int8_t rfm_dio0, int8_t rfm_nss);
 		void begin(void);
 		void sendData(unsigned char *Data, unsigned char Data_Length, unsigned int Frame_Counter_Tx);
 
 	private:
 		uint8_t randomNum;
 		int8_t _cs, _irq;
-		static const unsigned char LoRa_Frequency[8][3];
+    unsigned char _rfmMSB, _rfmMID, _rfmLSB;
+    static const unsigned char LoRa_Frequency[8][3];
 		static const unsigned char S_Table[16][16];
 		void RFM_Send_Package(unsigned char *RFM_Tx_Package, unsigned char Package_Length);
 		void RFM_Write(unsigned char RFM_Address, unsigned char RFM_Data);
