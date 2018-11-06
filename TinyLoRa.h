@@ -4,8 +4,8 @@
 #include <Arduino.h>
 #include <avr/pgmspace.h>
 
-// debugging, unset if you don't need this.
-#define DEBUG
+// uncomment for debug output
+// #define DEBUG
 
 /**************************************************************************/
 /*! 

@@ -170,51 +170,51 @@ void TinyLoRa::setChannel(rfm_channels_t channel) {
   switch (channel)
   {
     case CH0:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[0][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[0][2]));
       _rfmMID = pgm_read_byte(&(LoRa_Frequency[0][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[0][2]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[0][0]));
       _isMultiChan = 0;
       break;
     case CH1:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[1][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[1][2]));
       _rfmMID = pgm_read_byte(&(LoRa_Frequency[1][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[1][2]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[1][0]));
       _isMultiChan = 0;
       break;
     case CH2:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[2][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[2][2]));
       _rfmMID = pgm_read_byte(&(LoRa_Frequency[2][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[2][2]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[2][0]));
       _isMultiChan = 0;
       break;
     case CH3:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[3][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[3][2]));
       _rfmMID = pgm_read_byte(&(LoRa_Frequency[3][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[3][2]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[3][0]));
       _isMultiChan = 0;
       break;
     case CH4:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[4][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[4][2]));
       _rfmMID = pgm_read_byte(&(LoRa_Frequency[4][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[4][2]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[4][0]));
       _isMultiChan = 0;
       break;
     case CH5:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[5][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[5][2]));
       _rfmMID = pgm_read_byte(&(LoRa_Frequency[5][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[5][2]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[5][0]));
       _isMultiChan = 0;
       break;
     case CH6:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[6][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[6][2]));
       _rfmMID = pgm_read_byte(&(LoRa_Frequency[6][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[6][2]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[6][0]));
       _isMultiChan = 0;
       break;
     case CH7:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[7][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[7][2]));
       _rfmMID = pgm_read_byte(&(LoRa_Frequency[7][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[7][2]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[7][0]));
       _isMultiChan = 0;
       break;
     case MULTI:
@@ -465,7 +465,9 @@ void TinyLoRa::sendData(unsigned char *Data, unsigned char Data_Length, unsigned
  
   //Send Package
   RFM_Send_Package(RFM_Data, RFM_Package_Length);
-  Serial.println("sent package!");
+  #ifdef DEBUG
+    Serial.println("sent package!");
+  #endif
 }
 /*
 *****************************************************************************************
