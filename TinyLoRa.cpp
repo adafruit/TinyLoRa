@@ -48,7 +48,7 @@ static SPISettings RFM_spisettings = SPISettings(4000000, MSBFIRST, SPI_MODE0);
 */
 
 #ifdef AU915
-static const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
+const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
 	{ 0xE5, 0x33, 0x5A },	//Channel 0 916.800 MHz / 61.035 Hz = 15020890 = 0xE5335A
 	{ 0xE5, 0x40, 0x26 },	//Channel 2 917.000 MHz / 61.035 Hz = 15024166 = 0xE54026
 	{ 0xE5, 0x4C, 0xF3 },	//Channel 3 917.200 MHz / 61.035 Hz = 15027443 = 0xE54CF3
@@ -61,7 +61,7 @@ static const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
 #endif
 
 #ifdef EU863
-static const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
+const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
 	{ 0xD9, 0x06, 0x8B },	//Channel 0 868.100 MHz / 61.035 Hz = 14222987 = 0xD9068B
 	{ 0xD9, 0x13, 0x58 },	//Channel 1 868.300 MHz / 61.035 Hz = 14226264 = 0xD91358
 	{ 0xD9, 0x20, 0x24 },	//Channel 2 868.500 MHz / 61.035 Hz = 14229540 = 0xD92024
@@ -75,7 +75,7 @@ static const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
 #endif
 
 #ifdef US902
-static const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
+const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
 	{ 0xE1, 0xF9, 0xC0 },		//Channel 0 903.900 MHz / 61.035 Hz = 14809536 = 0xE1F9C0
 	{ 0xE2, 0x06, 0x8C },		//Channel 1 904.100 MHz / 61.035 Hz = 14812812 = 0xE2068C
 	{ 0xE2, 0x13, 0x59},		//Channel 2 904.300 MHz / 61.035 Hz = 14816089 = 0xE21359
@@ -88,7 +88,7 @@ static const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
 #endif
 
 #ifdef AS920
-static const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
+const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
 	{ 0xE6, 0xCC, 0xF4 },		//Channel 0 868.100 MHz / 61.035 Hz = 15125748 = 0xE6CCF4
 	{ 0xE6, 0xD9, 0xC0 },		//Channel 1 868.300 MHz / 61.035 Hz = 15129024 = 0xE6D9C0
 	{ 0xE6, 0x8C, 0xF3 },		//Channel 2 868.500 MHz / 61.035 Hz = 15109363 = 0xE68CF3
@@ -107,7 +107,7 @@ static const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
 *****************************************************************************************
 */
 
-static const unsigned char PROGMEM TinyLoRa::S_Table[16][16] = {
+const unsigned char PROGMEM TinyLoRa::S_Table[16][16] = {
 	  {0x63,0x7C,0x77,0x7B,0xF2,0x6B,0x6F,0xC5,0x30,0x01,0x67,0x2B,0xFE,0xD7,0xAB,0x76},
 	  {0xCA,0x82,0xC9,0x7D,0xFA,0x59,0x47,0xF0,0xAD,0xD4,0xA2,0xAF,0x9C,0xA4,0x72,0xC0},
 	  {0xB7,0xFD,0x93,0x26,0x36,0x3F,0xF7,0xCC,0x34,0xA5,0xE5,0xF1,0x71,0xD8,0x31,0x15},
