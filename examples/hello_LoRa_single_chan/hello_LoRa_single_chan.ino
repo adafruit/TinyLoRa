@@ -29,7 +29,7 @@ uint8_t DevAddr[4] = { 0x00, 0x00, 0x00, 0x00 };
 unsigned char loraData[11] = {"hello LoRa"};
 
 // How many times data transfer should occur, in seconds
-const unsigned int sendInterval = 15;
+const unsigned int sendInterval = 30;
 
 // Pinout for Feather 32u4 LoRa
 TinyLoRa lora = TinyLoRa(7, 8);
