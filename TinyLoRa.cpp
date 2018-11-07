@@ -455,7 +455,7 @@ void TinyLoRa::sendData(unsigned char *Data, unsigned char Data_Length, unsigned
 
   //make a copy of Data
   unsigned char tmpData[Data_Length];
-  for (int i = 0; i < Data_Length-1; i++)
+  for (int i = 0; i < Data_Length; i++)
   {
     tmpData[i] = Data[i];
   }
