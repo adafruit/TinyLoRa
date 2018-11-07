@@ -453,26 +453,15 @@ void TinyLoRa::sendData(unsigned char *Data, unsigned char Data_Length, unsigned
   unsigned char Frame_Control = 0x00;
   unsigned char Frame_Port = 0x01;
 
-  //br: make a copy of Data so that it doesn't get overwritten in Encrypt_Payload
-  unsigned char tmpData[11];
+  //make a copy of Data
+  unsigned char tmpData[10];
   for (int i = 0; i < 10; i++)
   {
-    #ifdef DEBUG
-        Serial.print(Data[i]);
-    #endif
-        tmpData[i] = Data[i];
+    tmpData[i] = Data[i];
   }
 
-  #ifdef DEBUG
-    for (int j = 0; j < 10; j++)
-    {
-      Serial.print(tmpData[j]);
-    }
-  #endif
-
-  //Encrypt the data
-  Encrypt_Payload(Data, Data_Length, Frame_Counter_Tx, Direction);
-
+  //Encrypt Data (data argument is overwritten in this function)
+  Encrypt_Payload(tmpData, Data_Length, Frame_Counter_Tx, Direction);
   
   //Build the Radio Package
   RFM_Data[0] = Mac_Header;
@@ -491,7 +480,7 @@ void TinyLoRa::sendData(unsigned char *Data, unsigned char Data_Length, unsigned
   //Load Data
   for(i = 0; i < Data_Length; i++)
   {
-    RFM_Data[RFM_Package_Length + i] = Data[i];
+    RFM_Data[RFM_Package_Length + i] = tmpData[i];
   }
 
   //Add data Lenth to package length

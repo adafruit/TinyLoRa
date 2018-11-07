@@ -26,7 +26,7 @@ uint8_t DevAddr[4] = { 0x00, 0x00, 0x00, 0x00 };
 
 /************************** Example Begins Here ***********************************/
 // Data Packet to Send to TTN
-unsigned char loraData[11] = {"hello LoRa"};
+unsigned char loraData[10] = {"hello LoRa"};
 
 // How many times data transfer should occur, in seconds
 const unsigned int sendInterval = 30;
