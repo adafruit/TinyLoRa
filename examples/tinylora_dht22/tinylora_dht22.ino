@@ -35,6 +35,9 @@ const unsigned int sendInterval = 30;
 // Pinout for Adafruit Feather 32u4 LoRa
 TinyLoRa lora = TinyLoRa(7, 8);
 
+// Pinout for Adafruit Feather M0 LoRa
+//TinyLoRa lora = TinyLoRa(3, 8);
+
 // pin the DHT22 is connected to
 #define DHTPIN 10
 DHT dht(DHTPIN, DHT22);
@@ -45,8 +48,8 @@ DHT dht(DHTPIN, DHT22);
 void setup()
 {
   delay(2000);
-  while (! Serial);
   Serial.begin(9600);
+  while (! Serial);
  
   // Initialize pin LED_BUILTIN as an output
   pinMode(LED_BUILTIN, OUTPUT);
@@ -76,6 +79,7 @@ void loop()
   Serial.print(" %\t");
   Serial.print("Temperature: ");
   Serial.print(t);
+  Serial.println("");
   
   // Check if any reads failed and exit early (to try again).
   if (isnan(h) || isnan(t)) {
