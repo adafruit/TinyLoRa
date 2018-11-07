@@ -7,10 +7,7 @@
  *
  * This is the documentation for Adafruit's Feather LoRa for the
  * Arduino platform. It is designed specifically to work with the
- * Adafruit Feather 32u4 LoRa: 
- * This is the documentation for Adafruit's FXOS8700 driver for the
- * Arduino platform.  It is designed specifically to work with the
- * Adafruit FXOS8700 breakout: https://www.adafruit.com/product/3078
+ * Adafruit Feather 32u4 LoRa.
  *
  * This library uses SPI to communicate, 4 pins (SCL, SDA, IRQ, SS)
  * are required to interface with the HopeRF RFM95/96 breakout.
@@ -455,6 +452,23 @@ void TinyLoRa::sendData(unsigned char *Data, unsigned char Data_Length, unsigned
 
   unsigned char Frame_Control = 0x00;
   unsigned char Frame_Port = 0x01;
+
+  //br: make a copy of Data so that it doesn't get overwritten in Encrypt_Payload
+  unsigned char tmpData[11];
+  for (int i = 0; i < 10; i++)
+  {
+    #ifdef DEBUG
+        Serial.print(Data[i]);
+    #endif
+        tmpData[i] = Data[i];
+  }
+
+  #ifdef DEBUG
+    for (int j = 0; j < 10; j++)
+    {
+      Serial.print(tmpData[j]);
+    }
+  #endif
 
   //Encrypt the data
   Encrypt_Payload(Data, Data_Length, Frame_Counter_Tx, Direction);
