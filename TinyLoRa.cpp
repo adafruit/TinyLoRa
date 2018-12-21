@@ -298,7 +298,7 @@ bool TinyLoRa::begin()
   pinMode(_cs, OUTPUT);
 
   // RFM95 _irq as input
-  pinMode(_irq, OUTPUT);
+  pinMode(_irq, INPUT);
 
   uint8_t ver = RFM_Read(0x42);
   if(ver!=18){
