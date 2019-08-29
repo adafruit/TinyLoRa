@@ -25,6 +25,10 @@ uint8_t AppSkey[16] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x
 uint8_t DevAddr[4] = { 0x00, 0x00, 0x00, 0x00 };
 
 /************************** Example Begins Here ***********************************/
+// setup TX settings
+uint8_t const TxPower = 0xff; // Default 0xff.
+uint8_t FramePort = 2;
+
 // Data Packet to Send to TTN
 unsigned char loraData[11] = {"hello LoRa"};
 
@@ -52,7 +56,7 @@ void setup()
   lora.setChannel(MULTI);
   // set datarate
   lora.setDatarate(SF7BW125);
-  if(!lora.begin())
+  if(!lora.begin(TxPower))
   {
     Serial.println("Failed");
     Serial.println("Check your radio");
@@ -64,7 +68,7 @@ void setup()
 void loop()
 {
   Serial.println("Sending LoRa Data...");
-  lora.sendData(loraData, sizeof(loraData), lora.frameCounter);
+  lora.sendData(loraData, sizeof(loraData), lora.frameCounter, FramePort);
   Serial.print("Frame Counter: ");Serial.println(lora.frameCounter);
   lora.frameCounter++;
 

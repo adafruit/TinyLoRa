@@ -51,6 +51,8 @@
 extern uint8_t NwkSkey[16]; ///< Network Session Key
 extern uint8_t AppSkey[16]; ///< Application Session Key
 extern uint8_t DevAddr[4]; ///< Device Address
+extern uint8_t Tx_Power; ///< Tx power
+extern uint8_t Frame_Port; ///< Frame Port
 
 static SPISettings RFM_spisettings = SPISettings(4000000, MSBFIRST, SPI_MODE0);
 
@@ -91,7 +93,7 @@ const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
 const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
 	{ 0xE1, 0xF9, 0xC0 },		//Channel 0 903.900 MHz / 61.035 Hz = 14809536 = 0xE1F9C0
 	{ 0xE2, 0x06, 0x8C },		//Channel 1 904.100 MHz / 61.035 Hz = 14812812 = 0xE2068C
-	{ 0xE2, 0x13, 0x59},		//Channel 2 904.300 MHz / 61.035 Hz = 14816089 = 0xE21359
+	{ 0xE2, 0x13, 0x59 },		//Channel 2 904.300 MHz / 61.035 Hz = 14816089 = 0xE21359
 	{ 0xE2, 0x20, 0x26 },		//Channel 3 904.500 MHz / 61.035 Hz = 14819366 = 0xE22026
 	{ 0xE2, 0x2C, 0xF3 },		//Channel 4 904.700 MHz / 61.035 Hz = 14822643 = 0xE22CF3
 	{ 0xE2, 0x39, 0xC0 },		//Channel 5 904.900 MHz / 61.035 Hz = 14825920 = 0xE239C0
@@ -292,7 +294,7 @@ TinyLoRa::TinyLoRa(int8_t rfm_irq, int8_t rfm_nss, int8_t rfm_rst) {
      @return True if the RFM has been initialized
  */
  /**************************************************************************/
-bool TinyLoRa::begin() 
+bool TinyLoRa::begin(unsigned char Tx_Power) 
 {
 
   // start and configure SPI
@@ -331,7 +333,7 @@ bool TinyLoRa::begin()
   RFM_Write(0x01,MODE_LORA);
 
   //PA pin (maximal power)
-  RFM_Write(0x09,0xFF);
+  RFM_Write(0x09,Tx_Power);
 
   //Rx Timeout set to 37 symbols
   RFM_Write(0x1F,0x25);
@@ -502,7 +504,7 @@ uint8_t TinyLoRa::RFM_Read(uint8_t RFM_Address) {
               Length of data to be sent.
 */
 /**************************************************************************/
-void TinyLoRa::sendData(unsigned char *Data, unsigned char Data_Length, unsigned int Frame_Counter_Tx)
+void TinyLoRa::sendData(unsigned char *Data, unsigned char Data_Length, unsigned int Frame_Counter_Tx, unsigned char Frame_Port)
 {
   
   //Define variables
@@ -520,7 +522,7 @@ void TinyLoRa::sendData(unsigned char *Data, unsigned char Data_Length, unsigned
   unsigned char Mac_Header = 0x40;
 
   unsigned char Frame_Control = 0x00;
-  unsigned char Frame_Port = 0x01;
+//  unsigned char Frame_Port = 0x01;
 
   //make a copy of Data
   unsigned char tmpData[Data_Length];
