@@ -531,7 +531,6 @@ void TinyLoRa::sendData(unsigned char *Data, unsigned char Data_Length, unsigned
   unsigned char Mac_Header = 0x40;
 
   unsigned char Frame_Control = 0x00;
-// TODO Do we need this?  unsigned char Frame_Port;
 
   //make a copy of Data
   unsigned char tmpData[Data_Length];
