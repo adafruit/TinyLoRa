@@ -25,9 +25,32 @@ uint8_t AppSkey[16] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x
 uint8_t DevAddr[4] = { 0x00, 0x00, 0x00, 0x00 };
 
 /************************** Example Begins Here ***********************************/
-// setup TX settings
-uint8_t const TxPower = 0xff; // Default 0xff.
-uint8_t FramePort = 2;
+// Start TxPower settings //
+uint8_t const TxPower = 0xFF; // default value. Don't modify this value [default: 0xFF]
+
+// uncomment this section if you want to control the TxPower, and comment the above line.
+/*
+bool PaBoost = 1; // 8th bit [default: 1]
+uint8_t OutputPower = 1; // 1-4 bit (DEC values: 0-15) [default: 15] +2 to +17dBm.
+uint8_t MaxPower = 4; // 5-7 bit, (DEC values: 0-7) [default: 4] BUG? Range -4 to 0 but DOC says -4 to +15dBm
+
+// function to pack the data for TXpower.
+uint8_t packDataPower(){
+  // According to HOPE RFM9x documentation (p. 80 section 5.4.3), if PA_LF or PA_HF is used instead of PaBoost, output power must be disabled!
+  if ( PaBoost == 0 && OutputPower > 0 ) {
+     OutputPower = 0; // make sure OutputPower is disabled if PA_LF or PA_HF is used.
+    }
+
+  uint8_t DataPower = (PaBoost << 7) + (MaxPower << 4) + OutputPower;
+  return DataPower;
+}
+
+// necessary for the initial setup.
+uint8_t TxPower = packDataPower();
+*/
+
+// Port number.
+uint8_t FramePort = 1;
 
 // Data Packet to Send to TTN
 unsigned char loraData[11] = {"hello LoRa"};
@@ -56,12 +79,17 @@ void setup()
   lora.setChannel(MULTI);
   // set datarate
   lora.setDatarate(SF7BW125);
-  if(!lora.begin(TxPower))
+  
+  if(!lora.begin())
   {
     Serial.println("Failed");
     Serial.println("Check your radio");
     while(true);
   }
+  
+  // ATTN: setPower *after* lora.begin or feather 32u4 hangs, untested with M0.
+  lora.setPower(TxPower);
+  
   Serial.println("OK");
 }
 

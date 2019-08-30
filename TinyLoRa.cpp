@@ -51,8 +51,6 @@
 extern uint8_t NwkSkey[16]; ///< Network Session Key
 extern uint8_t AppSkey[16]; ///< Application Session Key
 extern uint8_t DevAddr[4]; ///< Device Address
-extern uint8_t Tx_Power; ///< Tx power
-extern uint8_t Frame_Port; ///< Frame Port
 
 static SPISettings RFM_spisettings = SPISettings(4000000, MSBFIRST, SPI_MODE0);
 
@@ -294,7 +292,7 @@ TinyLoRa::TinyLoRa(int8_t rfm_irq, int8_t rfm_nss, int8_t rfm_rst) {
      @return True if the RFM has been initialized
  */
  /**************************************************************************/
-bool TinyLoRa::begin(unsigned char Tx_Power) 
+bool TinyLoRa::begin()
 {
 
   // start and configure SPI
@@ -332,9 +330,6 @@ bool TinyLoRa::begin(unsigned char Tx_Power)
   //Set RFM in LoRa mode
   RFM_Write(0x01,MODE_LORA);
 
-  //PA pin (maximal power)
-  RFM_Write(0x09,Tx_Power);
-
   //Rx Timeout set to 37 symbols
   RFM_Write(0x1F,0x25);
 
@@ -366,6 +361,18 @@ bool TinyLoRa::begin(unsigned char Tx_Power)
   txrandomNum = 0x00;
   return 1;
 }
+
+/**************************************************************************/
+/*! 
+    @brief Sets the TX power
+    @param Tx_Power How much TX power.
+*/
+/**************************************************************************/
+void TinyLoRa::setPower(unsigned char Tx_Power) {
+  //PA pin (default value is 0xff).
+  RFM_Write(0x09,Tx_Power);
+}
+
 
 /**************************************************************************/
 /*!
@@ -502,6 +509,8 @@ uint8_t TinyLoRa::RFM_Read(uint8_t RFM_Address) {
               Frame counter for transfer frames.
     @param    Data_Length
               Length of data to be sent.
+    @param    Frame_Port
+              Number of frame port
 */
 /**************************************************************************/
 void TinyLoRa::sendData(unsigned char *Data, unsigned char Data_Length, unsigned int Frame_Counter_Tx, unsigned char Frame_Port)
@@ -522,7 +531,7 @@ void TinyLoRa::sendData(unsigned char *Data, unsigned char Data_Length, unsigned
   unsigned char Mac_Header = 0x40;
 
   unsigned char Frame_Control = 0x00;
-//  unsigned char Frame_Port = 0x01;
+// TODO Do we need this?  unsigned char Frame_Port;
 
   //make a copy of Data
   unsigned char tmpData[Data_Length];

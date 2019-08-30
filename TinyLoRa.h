@@ -69,8 +69,8 @@ typedef enum rfm_datarates
 } rfm_datarates_t;
 
 /** Region configuration*/
-#define US902 ///< Used in USA, Canada and South America
-//#define EU863 ///< Used in Europe
+//#define US902 ///< Used in USA, Canada and South America
+#define EU863 ///< Used in Europe
 //#define AU915 ///< Used in Australia
 //#define AS920 ///< Used in Asia
 
@@ -106,8 +106,9 @@ class TinyLoRa
 		uint16_t frameCounter;  ///<frame counter
     void setChannel(rfm_channels_t channel);
     void setDatarate(rfm_datarates_t datarate);
+    void setPower(unsigned char Tx_Power);
     TinyLoRa(int8_t rfm_dio0, int8_t rfm_nss, int8_t rfm_rst);
-		bool begin(unsigned char Tx_Power);
+		bool begin();
 		void sendData(unsigned char *Data, unsigned char Data_Length, unsigned int Frame_Counter_Tx, unsigned char Frame_Port);
 
 	private:

@@ -26,6 +26,28 @@ uint8_t AppSkey[16] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x
 uint8_t DevAddr[4] = { 0x00, 0x00, 0x00, 0x00 };
 
 /************************** Example Begins Here ***********************************/
+// Start TxPower settings //
+bool PaBoost = 1; // 7th bit [default: 1]
+uint8_t OutputPower = 1; // 0-3 bit (0-15) [default: 15] +2 to +17dBm.
+uint8_t MaxPower = 4; // 4-6 bit, (0-7) [default: 4] BUG? Range -4 to 0 but DOC says -4 to +15dBm
+
+// function to pack the data for TXpower.
+uint8_t packDataPower(){
+  // According to HOPE RFM9x documentation (p. 80 section 5.4.3), if PA_LF or PA_HF is used instead of PaBoost, output power must be disabled!
+  if ( PaBoost == 0 && OutputPower > 0 ) {
+     OutputPower = 0; // make sure OutputPower is disabled if PA_LF or PA_HF is used.
+    }
+
+  uint8_t DataPower = (PaBoost << 7) + (MaxPower << 4) + OutputPower;
+  return DataPower;
+}
+
+// necessary for the initial setup.
+uint8_t TxPower = packDataPower();
+
+// Port number.
+uint8_t FramePort = 1;
+
 // Data Packet to Send to TTN
 unsigned char loraData[4];
 
@@ -57,6 +79,7 @@ void setup()
   lora.setChannel(MULTI);
   // set datarate
   lora.setDatarate(SF7BW125);
+  
   if(!lora.begin())
   {
     Serial.println("Failed");
@@ -64,6 +87,9 @@ void setup()
     while(true);
   }
   Serial.println("OK");
+
+  // ATTN: setPower *after* lora.begin or feather 32u4 hangs, untested with M0.
+  lora.setPower(TxPower);
 
   // Initialize DHT
   dht.begin();
@@ -103,7 +129,7 @@ void loop()
   loraData[3] = lowByte(humidInt);
   
   Serial.println("Sending LoRa Data...");
-  lora.sendData(loraData, sizeof(loraData), lora.frameCounter);
+  lora.sendData(loraData, sizeof(loraData), lora.frameCounter, FramePort);
   Serial.print("Frame Counter: ");Serial.println(lora.frameCounter);
   lora.frameCounter++;
 
