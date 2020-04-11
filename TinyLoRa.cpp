@@ -60,58 +60,45 @@ static SPISettings RFM_spisettings = SPISettings(4000000, MSBFIRST, SPI_MODE0);
 *****************************************************************************************
 */
 
-#ifdef AU915
-const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
-	{ 0xE5, 0x33, 0x5A },	//Channel 0 916.800 MHz / 61.035 Hz = 15020890 = 0xE5335A
-	{ 0xE5, 0x40, 0x26 },	//Channel 2 917.000 MHz / 61.035 Hz = 15024166 = 0xE54026
-	{ 0xE5, 0x4C, 0xF3 },	//Channel 3 917.200 MHz / 61.035 Hz = 15027443 = 0xE54CF3
-	{ 0xE5, 0x59, 0xC0 },	//Channel 4 917.400 MHz / 61.035 Hz = 15030720 = 0xE559C0
-	{ 0xE5, 0x66, 0x8D },	//Channel 5 917.600 MHz / 61.035 Hz = 15033997 = 0xE5668D
-	{ 0xE5, 0x73, 0x5A },	//Channel 6 917.800 MHz / 61.035 Hz = 15037274 = 0xE5735A
-	{ 0xE5, 0x80, 0x27 },	//Channel 7 918.000 MHz / 61.035 Hz = 15040551 = 0xE58027
-	{ 0xE5, 0x8C, 0xF3 }	//Channel 8 918.200 MHz / 61.035 Hz = 15043827 = 0xE58CF3
+const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[4][8][3] = {
+	{ // AU915
+		{ 0xE5, 0x33, 0x5A },	//Channel 0 916.800 MHz / 61.035 Hz = 15020890 = 0xE5335A
+		{ 0xE5, 0x40, 0x26 },	//Channel 2 917.000 MHz / 61.035 Hz = 15024166 = 0xE54026
+		{ 0xE5, 0x4C, 0xF3 },	//Channel 3 917.200 MHz / 61.035 Hz = 15027443 = 0xE54CF3
+		{ 0xE5, 0x59, 0xC0 },	//Channel 4 917.400 MHz / 61.035 Hz = 15030720 = 0xE559C0
+		{ 0xE5, 0x66, 0x8D },	//Channel 5 917.600 MHz / 61.035 Hz = 15033997 = 0xE5668D
+		{ 0xE5, 0x73, 0x5A },	//Channel 6 917.800 MHz / 61.035 Hz = 15037274 = 0xE5735A
+		{ 0xE5, 0x80, 0x27 },	//Channel 7 918.000 MHz / 61.035 Hz = 15040551 = 0xE58027
+		{ 0xE5, 0x8C, 0xF3 }	//Channel 8 918.200 MHz / 61.035 Hz = 15043827 = 0xE58CF3
+        }, { // EU863
+		{ 0xD9, 0x06, 0x8B },	//Channel 0 868.100 MHz / 61.035 Hz = 14222987 = 0xD9068B
+		{ 0xD9, 0x13, 0x58 },	//Channel 1 868.300 MHz / 61.035 Hz = 14226264 = 0xD91358
+		{ 0xD9, 0x20, 0x24 },	//Channel 2 868.500 MHz / 61.035 Hz = 14229540 = 0xD92024
+		{ 0xD8, 0xC6, 0x8B },	//Channel 3 867.100 MHz / 61.035 Hz = 14206603 = 0xD8C68B
+		{ 0xD8, 0xD3, 0x58 },	//Channel 4 867.300 MHz / 61.035 Hz = 14209880 = 0xD8D358
+		{ 0xD8, 0xE0, 0x24 },	//Channel 5 867.500 MHz / 61.035 Hz = 14213156 = 0xD8E024
+		{ 0xD8, 0xEC, 0xF1 },	//Channel 6 867.700 MHz / 61.035 Hz = 14216433 = 0xD8ECF1
+		{ 0xD8, 0xF9, 0xBE }	//Channel 7 867.900 MHz / 61.035 Hz = 14219710 = 0xD8F9BE
+        }, { // US902
+		{ 0xE1, 0xF9, 0xC0 },	//Channel 0 903.900 MHz / 61.035 Hz = 14809536 = 0xE1F9C0
+		{ 0xE2, 0x06, 0x8C },	//Channel 1 904.100 MHz / 61.035 Hz = 14812812 = 0xE2068C
+		{ 0xE2, 0x13, 0x59 },	//Channel 2 904.300 MHz / 61.035 Hz = 14816089 = 0xE21359
+		{ 0xE2, 0x20, 0x26 },	//Channel 3 904.500 MHz / 61.035 Hz = 14819366 = 0xE22026
+		{ 0xE2, 0x2C, 0xF3 },	//Channel 4 904.700 MHz / 61.035 Hz = 14822643 = 0xE22CF3
+		{ 0xE2, 0x39, 0xC0 },	//Channel 5 904.900 MHz / 61.035 Hz = 14825920 = 0xE239C0
+		{ 0xE2, 0x46, 0x8C },	//Channel 6 905.100 MHz / 61.035 Hz = 14829196 = 0xE2468C
+		{ 0xE2, 0x53, 0x59 }	//Channel 7 905.300 MHz / 61.035 Hz = 14832473 = 0xE25359
+        }, { // AS920
+		{ 0xE6, 0xCC, 0xF4 },	//Channel 0 868.100 MHz / 61.035 Hz = 15125748 = 0xE6CCF4
+		{ 0xE6, 0xD9, 0xC0 },	//Channel 1 868.300 MHz / 61.035 Hz = 15129024 = 0xE6D9C0
+		{ 0xE6, 0x8C, 0xF3 },	//Channel 2 868.500 MHz / 61.035 Hz = 15109363 = 0xE68CF3
+		{ 0xE6, 0x99, 0xC0 },	//Channel 3 867.100 MHz / 61.035 Hz = 15112640 = 0xE699C0
+		{ 0xE6, 0xA6, 0x8D },	//Channel 4 867.300 MHz / 61.035 Hz = 15115917 = 0xE6A68D
+		{ 0xE6, 0xB3, 0x5A },	//Channel 5 867.500 MHz / 61.035 Hz = 15119194 = 0xE6B35A
+		{ 0xE6, 0xC0, 0x27 },	//Channel 6 867.700 MHz / 61.035 Hz = 15122471 = 0xE6C027
+		{ 0xE6, 0x80, 0x27 }	//Channel 7 867.900 MHz / 61.035 Hz = 15106087 = 0xE68027
+        },
 };
-#endif
-
-#ifdef EU863
-const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
-	{ 0xD9, 0x06, 0x8B },	//Channel 0 868.100 MHz / 61.035 Hz = 14222987 = 0xD9068B
-	{ 0xD9, 0x13, 0x58 },	//Channel 1 868.300 MHz / 61.035 Hz = 14226264 = 0xD91358
-	{ 0xD9, 0x20, 0x24 },	//Channel 2 868.500 MHz / 61.035 Hz = 14229540 = 0xD92024
-	{ 0xD8, 0xC6, 0x8B },	//Channel 3 867.100 MHz / 61.035 Hz = 14206603 = 0xD8C68B
-	{ 0xD8, 0xD3, 0x58 },	//Channel 4 867.300 MHz / 61.035 Hz = 14209880 = 0xD8D358
-	{ 0xD8, 0xE0, 0x24 },	//Channel 5 867.500 MHz / 61.035 Hz = 14213156 = 0xD8E024
-	{ 0xD8, 0xEC, 0xF1 },	//Channel 6 867.700 MHz / 61.035 Hz = 14216433 = 0xD8ECF1
-	{ 0xD8, 0xF9, 0xBE }	//Channel 7 867.900 MHz / 61.035 Hz = 14219710 = 0xD8F9BE
-
-};
-#endif
-
-#ifdef US902
-const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
-	{ 0xE1, 0xF9, 0xC0 },		//Channel 0 903.900 MHz / 61.035 Hz = 14809536 = 0xE1F9C0
-	{ 0xE2, 0x06, 0x8C },		//Channel 1 904.100 MHz / 61.035 Hz = 14812812 = 0xE2068C
-	{ 0xE2, 0x13, 0x59 },		//Channel 2 904.300 MHz / 61.035 Hz = 14816089 = 0xE21359
-	{ 0xE2, 0x20, 0x26 },		//Channel 3 904.500 MHz / 61.035 Hz = 14819366 = 0xE22026
-	{ 0xE2, 0x2C, 0xF3 },		//Channel 4 904.700 MHz / 61.035 Hz = 14822643 = 0xE22CF3
-	{ 0xE2, 0x39, 0xC0 },		//Channel 5 904.900 MHz / 61.035 Hz = 14825920 = 0xE239C0
-	{ 0xE2, 0x46, 0x8C },		//Channel 6 905.100 MHz / 61.035 Hz = 14829196 = 0xE2468C
-	{ 0xE2, 0x53, 0x59 }		//Channel 7 905.300 MHz / 61.035 Hz = 14832473 = 0xE25359
-};
-#endif
-
-#ifdef AS920
-const unsigned char PROGMEM TinyLoRa::LoRa_Frequency[8][3] = {
-	{ 0xE6, 0xCC, 0xF4 },		//Channel 0 868.100 MHz / 61.035 Hz = 15125748 = 0xE6CCF4
-	{ 0xE6, 0xD9, 0xC0 },		//Channel 1 868.300 MHz / 61.035 Hz = 15129024 = 0xE6D9C0
-	{ 0xE6, 0x8C, 0xF3 },		//Channel 2 868.500 MHz / 61.035 Hz = 15109363 = 0xE68CF3
-	{ 0xE6, 0x99, 0xC0 },		//Channel 3 867.100 MHz / 61.035 Hz = 15112640 = 0xE699C0
-	{ 0xE6, 0xA6, 0x8D },		//Channel 4 867.300 MHz / 61.035 Hz = 15115917 = 0xE6A68D
-	{ 0xE6, 0xB3, 0x5A },		//Channel 5 867.500 MHz / 61.035 Hz = 15119194 = 0xE6B35A
-	{ 0xE6, 0xC0, 0x27 },		//Channel 6 867.700 MHz / 61.035 Hz = 15122471 = 0xE6C027
-	{ 0xE6, 0x80, 0x27 }		//Channel 7 867.900 MHz / 61.035 Hz = 15106087 = 0xE68027
-};
-#endif
 
 
 /*
@@ -196,6 +183,17 @@ void TinyLoRa::setDatarate(rfm_datarates_t datarate) {
 
 /**************************************************************************/
 /*! 
+    @brief Sets the Regional frequency plan to use. Call this before 
+           calling setChannel.
+    @param region Which region's frequency plan to use
+*/
+/**************************************************************************/
+void TinyLoRa::setRegion(rfm_regions_t region) {
+  _region = region;
+}
+
+/**************************************************************************/
+/*! 
     @brief Sets the RFM channel.
     @param channel Which channel to send data
 */
@@ -207,51 +205,51 @@ void TinyLoRa::setChannel(rfm_channels_t channel) {
   switch (channel)
   {
     case CH0:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[0][2]));
-      _rfmMID = pgm_read_byte(&(LoRa_Frequency[0][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[0][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[_region][0][2]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[_region][0][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[_region][0][0]));
       _isMultiChan = 0;
       break;
     case CH1:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[1][2]));
-      _rfmMID = pgm_read_byte(&(LoRa_Frequency[1][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[1][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[_region][1][2]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[_region][1][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[_region][1][0]));
       _isMultiChan = 0;
       break;
     case CH2:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[2][2]));
-      _rfmMID = pgm_read_byte(&(LoRa_Frequency[2][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[2][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[_region][2][2]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[_region][2][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[_region][2][0]));
       _isMultiChan = 0;
       break;
     case CH3:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[3][2]));
-      _rfmMID = pgm_read_byte(&(LoRa_Frequency[3][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[3][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[_region][3][2]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[_region][3][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[_region][3][0]));
       _isMultiChan = 0;
       break;
     case CH4:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[4][2]));
-      _rfmMID = pgm_read_byte(&(LoRa_Frequency[4][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[4][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[_region][4][2]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[_region][4][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[_region][4][0]));
       _isMultiChan = 0;
       break;
     case CH5:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[5][2]));
-      _rfmMID = pgm_read_byte(&(LoRa_Frequency[5][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[5][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[_region][5][2]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[_region][5][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[_region][5][0]));
       _isMultiChan = 0;
       break;
     case CH6:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[6][2]));
-      _rfmMID = pgm_read_byte(&(LoRa_Frequency[6][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[6][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[_region][6][2]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[_region][6][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[_region][6][0]));
       _isMultiChan = 0;
       break;
     case CH7:
-      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[7][2]));
-      _rfmMID = pgm_read_byte(&(LoRa_Frequency[7][1]));
-      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[7][0]));
+      _rfmLSB = pgm_read_byte(&(LoRa_Frequency[_region][7][2]));
+      _rfmMID = pgm_read_byte(&(LoRa_Frequency[_region][7][1]));
+      _rfmMSB = pgm_read_byte(&(LoRa_Frequency[_region][7][0]));
       _isMultiChan = 0;
       break;
     case MULTI:
@@ -279,6 +277,7 @@ TinyLoRa::TinyLoRa(int8_t rfm_irq, int8_t rfm_nss, int8_t rfm_rst) {
   _irq = rfm_irq;
   _cs = rfm_nss;
   _rst = rfm_rst;
+  _region = US902;
 }
 
 /***************************************************************************
@@ -450,9 +449,9 @@ void TinyLoRa::RFM_Send_Package(unsigned char *RFM_Tx_Package, unsigned char Pac
 
   // select rfm channel
   if (_isMultiChan == 1) {
-    RFM_Write(REG_FRF_MSB, pgm_read_byte(&(LoRa_Frequency[randomNum][0])));
-    RFM_Write(REG_FRF_MID, pgm_read_byte(&(LoRa_Frequency[randomNum][1])));
-    RFM_Write(REG_FRF_LSB, pgm_read_byte(&(LoRa_Frequency[randomNum][2])));
+    RFM_Write(REG_FRF_MSB, pgm_read_byte(&(LoRa_Frequency[_region][randomNum][0])));
+    RFM_Write(REG_FRF_MID, pgm_read_byte(&(LoRa_Frequency[_region][randomNum][1])));
+    RFM_Write(REG_FRF_LSB, pgm_read_byte(&(LoRa_Frequency[_region][randomNum][2])));
   } else {
     RFM_Write(REG_FRF_MSB, _rfmMSB);
     RFM_Write(REG_FRF_MID, _rfmMID);
