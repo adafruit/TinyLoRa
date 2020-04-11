@@ -183,7 +183,8 @@ void TinyLoRa::setDatarate(rfm_datarates_t datarate) {
 
 /**************************************************************************/
 /*! 
-    @brief Sets the Regional frequency plan to use.
+    @brief Sets the Regional frequency plan to use. Call this before 
+           calling setChannel.
     @param region Which region's frequency plan to use
 */
 /**************************************************************************/
