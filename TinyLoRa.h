@@ -72,13 +72,14 @@ typedef enum rfm_datarates
   SF12BW125,
 } rfm_datarates_t;
 
-/** Region configuration*/
-#if !defined(EU863) && !defined(AU915) && !defined(AS920)  
-  #define US902 ///< Used in USA, Canada and South America
-#endif
-//#define EU863 ///< Used in Europe
-//#define AU915 ///< Used in Australia
-//#define AS920 ///< Used in Asia
+/** RFM regions */
+typedef enum rfm_regions
+{
+  AU915,
+  EU863,
+  US902,
+  AS920,
+} rfm_regions_t;
 
 #define RFM9x_VER   0x12 ///<Expected RFM9x RegVersion
 
@@ -113,6 +114,7 @@ class TinyLoRa
 		uint16_t frameCounter;  ///<frame counter
 		void setChannel(rfm_channels_t channel);
 		void setDatarate(rfm_datarates_t datarate);
+                void setRegion(rfm_regions_t region);
 		void setPower(int8_t Tx_Power = 17);
 		TinyLoRa(int8_t rfm_dio0, int8_t rfm_nss, int8_t rfm_rst);
 		bool begin(void);
@@ -123,7 +125,8 @@ class TinyLoRa
 		int8_t _cs, _irq, _rst;
 		bool _isMultiChan;
 		unsigned char _rfmMSB, _rfmMID, _rfmLSB, _sf, _bw, _modemcfg;
-		static const unsigned char LoRa_Frequency[8][3];
+                rfm_regions_t _region;
+		static const unsigned char LoRa_Frequency[4][8][3];
 		static const unsigned char S_Table[16][16];
 		void RFM_Send_Package(unsigned char *RFM_Tx_Package, unsigned char Package_Length);
 		void RFM_Write(unsigned char RFM_Address, unsigned char RFM_Data);
