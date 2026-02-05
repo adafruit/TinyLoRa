@@ -74,9 +74,9 @@ typedef enum rfm_datarates {
 #if !defined(EU863) && !defined(AU915) && !defined(AS920)
 #define US902 ///< Used in USA, Canada and South America
 #endif
-//#define EU863 ///< Used in Europe
-//#define AU915 ///< Used in Australia
-//#define AS920 ///< Used in Asia
+// #define EU863 ///< Used in Europe
+// #define AU915 ///< Used in Australia
+// #define AS920 ///< Used in Asia
 
 #define RFM9x_VER 0x12 ///< Expected RFM9x RegVersion
 
@@ -105,7 +105,7 @@ typedef enum rfm_datarates {
 */
 /**************************************************************************/
 class TinyLoRa {
-public:
+ public:
   uint8_t txrandomNum;   ///< random number for AES
   uint16_t frameCounter; ///< frame counter
   void setChannel(rfm_channels_t channel);
@@ -113,34 +113,34 @@ public:
   void setPower(int8_t Tx_Power = 17);
   TinyLoRa(int8_t rfm_dio0, int8_t rfm_nss, int8_t rfm_rst);
   bool begin(void);
-  void sendData(unsigned char *Data, unsigned char Data_Length,
+  void sendData(unsigned char* Data, unsigned char Data_Length,
                 unsigned int Frame_Counter_Tx, uint8_t Frame_Port = 1);
 
-private:
+ private:
   uint8_t randomNum;
   int8_t _cs, _irq, _rst;
   bool _isMultiChan;
   unsigned char _rfmMSB, _rfmMID, _rfmLSB, _sf, _bw, _modemcfg;
   static const unsigned char LoRa_Frequency[8][3];
   static const unsigned char S_Table[16][16];
-  void RFM_Send_Package(unsigned char *RFM_Tx_Package,
+  void RFM_Send_Package(unsigned char* RFM_Tx_Package,
                         unsigned char Package_Length);
   void RFM_Write(unsigned char RFM_Address, unsigned char RFM_Data);
   uint8_t RFM_Read(uint8_t RFM_Address);
-  void Encrypt_Payload(unsigned char *Data, unsigned char Data_Length,
+  void Encrypt_Payload(unsigned char* Data, unsigned char Data_Length,
                        unsigned int Frame_Counter, unsigned char Direction);
-  void Calculate_MIC(unsigned char *Data, unsigned char *Final_MIC,
+  void Calculate_MIC(unsigned char* Data, unsigned char* Final_MIC,
                      unsigned char Data_Length, unsigned int Frame_Counter,
                      unsigned char Direction);
-  void Generate_Keys(unsigned char *K1, unsigned char *K2);
-  void Shift_Left(unsigned char *Data);
-  void XOR(unsigned char *New_Data, unsigned char *Old_Data);
-  void AES_Encrypt(unsigned char *Data, unsigned char *Key);
-  void AES_Add_Round_Key(unsigned char *Round_Key, unsigned char (*State)[4]);
+  void Generate_Keys(unsigned char* K1, unsigned char* K2);
+  void Shift_Left(unsigned char* Data);
+  void XOR(unsigned char* New_Data, unsigned char* Old_Data);
+  void AES_Encrypt(unsigned char* Data, unsigned char* Key);
+  void AES_Add_Round_Key(unsigned char* Round_Key, unsigned char (*State)[4]);
   unsigned char AES_Sub_Byte(unsigned char Byte);
   void AES_Shift_Rows(unsigned char (*State)[4]);
   void AES_Mix_Collums(unsigned char (*State)[4]);
-  void AES_Calculate_Round_Key(unsigned char Round, unsigned char *Round_Key);
+  void AES_Calculate_Round_Key(unsigned char Round, unsigned char* Round_Key);
 };
 
 #endif
